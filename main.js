@@ -24,6 +24,28 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 
+//enter input:
+convertString(`1234567890987654`);
+//Sets into motion:
+console.log(invalidCardCompanies(findInvalidCards(batch)));
+
+//Takes an input, verifies if string. If so, converts to array and pushes to batch array. If array, just pushes to batch array.
+const convertString = (input) => {
+  let newCardArray = [];
+  // console.log(typeof input === `string`);
+  if (typeof input === 'string') {
+    for (let i = 0; i< input.length; i++) {
+      newCardArray.push(parseInt(input[i], 10));
+    }
+    batch.push(newCardArray);
+    return newCardArray;
+  }
+  batch.push(input);
+  return input;
+}
+
+
+
 
 // Checks individual Card Number Arrays:
 const validateCred = (array) => {
@@ -95,6 +117,3 @@ const invalidCardCompanies = (arrayInvalid) => {
   }
   return arrayCompanies;
 }
-
-
-console.log(invalidCardCompanies(findInvalidCards(batch)));
