@@ -24,10 +24,6 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 
-//enter input:
-convertString(`1234567890987654`);
-//Sets into motion:
-console.log(invalidCardCompanies(findInvalidCards(batch)));
 
 //Takes an input, verifies if string. If so, converts to array and pushes to batch array. If array, just pushes to batch array.
 const convertString = (input) => {
@@ -44,6 +40,8 @@ const convertString = (input) => {
   return input;
 }
 
+//enter input:
+convertString(`1234567890987654`);
 
 
 
@@ -117,3 +115,5 @@ const invalidCardCompanies = (arrayInvalid) => {
   }
   return arrayCompanies;
 }
+//Sets into motion:
+console.log(invalidCardCompanies(findInvalidCards(batch)));
