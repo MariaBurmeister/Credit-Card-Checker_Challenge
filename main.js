@@ -21,8 +21,8 @@ const mystery5 = [1, 4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3];
 
 // An array of all the arrays above
 const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5];
-
-
+const iBatch = [invalid1, invalid2, invalid3, invalid4, invalid5];
+const vBatch = [valid1, valid2, valid3, valid4, valid5];
 
 
 //Takes an input, verifies if string. If so, converts to array and pushes to batch array. If array, just pushes to batch array.
@@ -46,14 +46,14 @@ convertString(`1234567890987654`);
 
 
 // Checks individual Card Number Arrays:
-const validateCred = (array) => {
+const validateCred = (numArray) => {
   //Store sum of even tempArray elements and two times odd tempArray elements:
-  let sum = 0;
+  let sumAll = 0;
   //Create a temporary array to normalize arrays without changing original:
   const tempArray = [];
   //Push input Array to tempArray:
-  for (let i=0; i< array.length; i++) {
-    tempArray.push(array[i]);
+  for (let i=0; i< numArray.length; i++) {
+    tempArray.push(numArray[i]);
   }
   //If input array's length is odd (odd number of elements) add a 0 element to the front of tempArray, so normalizing odd arrays:
   if (tempArray.length % 2) {
@@ -61,22 +61,26 @@ const validateCred = (array) => {
   }
   //Cicles from first to last element in tempArray:
   for (let j = 0; j < tempArray.length; j++) {
-    //Stores the sum of even indexed elements:
+    let elementValue = tempArray[j];
+    //Stores the sumAll of even indexed elements:
     if (j%2) {
-      sum += tempArray[j];
-      //Adds and stores the sum of twice the value of odd indexed elements:
+      sumAll += elementValue;
+      //Adds and stores the sumAll of twice the value of odd indexed elements:
     } else {
-      let x = 2*tempArray[j];
-      x > 9 ? sum += (x - 9) :  sum += x;
+      let multipliedValue = 2*elementValue;
+        multipliedValue > 9 ?
+        sumAll += (multipliedValue - 9) :
+        sumAll += multipliedValue;
     }
   }
-  //Takes the summ of all even elements and doubled odd elements and multiplies for 9.
-  sum *= 9;
-  modulo = sum%10;
+  //Takes the sumAllm of all even elements and doubled odd elements and multiplies for 9.
+  multiSum = sumAll*9;
+  const modulo = multiSum%10;
+
+  //console.log(`sumAll is ${sumAll}, multiSum is${multiSum}, modulo is ${modulo}`);
   //Returns modulo of sum by 10. If true, card is invalid. If false, card is valid.
   return modulo;
 }
-
 
 
 
@@ -89,9 +93,27 @@ const findInvalidCards = (arrayBatch) => {
       invalidBatch.push(arrayBatch[i]);
     }
   }
+  //console.log('passou aqui');
   return invalidBatch;
 }
 
+
+
+//Takes invalid Credit Card Numbers in invalidBatch and cnverts into valid numbers:
+const convertInvalid = (arrayInvalid) => {
+  const newValid = [];
+  for (let i = 0; i< arrayInvalid.length; i++) {
+    newValid.push(arrayInvalid[i]);
+      const modulo = validateCred(newValid[i]);
+
+      newValid[i].splice(newValid[i].length -1, 0, modulo, 0);
+
+      //console.log(`invalid ${arrayInvalid[i]} valid ${newValid[i]}`);
+  }
+return newValid;
+}
+//console.log(findInvalidCards(convertInvalid(findInvalidCards(iBatch))));
+//console.log(findInvalidCards(convertInvalid(iBatch)));
 
 
 
