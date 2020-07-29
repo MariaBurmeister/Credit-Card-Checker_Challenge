@@ -26,16 +26,18 @@ const vBatch = [valid1, valid2, valid3, valid4, valid5];
 
 
 //Takes an input, verifies if string. If so, converts to array and pushes to batch array. If array, just pushes to batch array.
+
 const convertString = (input) => {
-  let newCardArray = [];
-  // console.log(typeof input === `string`);
+
   if (typeof input === 'string') {
-    for (let i = 0; i< input.length; i++) {
-      newCardArray.push(parseInt(input[i], 10));
-    }
+
+    stringToArray = input.split('');
+    const newCardArray = stringToArray.map(Number);
+
     batch.push(newCardArray);
     return newCardArray;
   }
+
   batch.push(input);
   return input;
 }
@@ -44,62 +46,54 @@ const convertString = (input) => {
 convertString(`1234567890987654`);
 
 
+const somaTudo = (soma, currentValue, index, array) => {
+  let sum = 0;
+  if (array.length %2 === 0){
+    sum =
+    index %2 !==0 ?
+    soma + currentValue :
+    2*currentValue <= 9 ?
+    soma + 2*currentValue :
+    soma + 2*currentValue - 9;
+  } else {
+    sum =
+    index %2 ===0 ?
+    soma + currentValue :
+    2*currentValue <= 9 ?
+    soma + 2*currentValue :
+    soma + 2*currentValue - 9;
+  }
+  // console.log(`length ${array.length} par? ${array.length %2 === 0} index: ${index}${index %2 !==0} soma ${soma} sum: ${sum} current value ${currentValue} <9 ${2*currentValue <=9}`);
+  return sum;
+}
 
 // Checks individual Card Number Arrays:
 const validateCred = (numArray) => {
-  //Store sum of even tempArray elements and two times odd tempArray elements:
-  let sumAll = 0;
-  //Create a temporary array to normalize arrays without changing original:
-  const tempArray = [];
-  //Push input Array to tempArray:
-  for (let i=0; i< numArray.length; i++) {
-    tempArray.push(numArray[i]);
-  }
-  //If input array's length is odd (odd number of elements) add a 0 element to the front of tempArray, so normalizing odd arrays:
-  if (tempArray.length % 2) {
-    tempArray.unshift(0);
-  }
-  //Cicles from first to last element in tempArray:
-  for (let j = 0; j < tempArray.length; j++) {
-    let elementValue = tempArray[j];
-    //Stores the sumAll of even indexed elements:
-    if (j%2) {
-      sumAll += elementValue;
-      //Adds and stores the sumAll of twice the value of odd indexed elements:
-    } else {
-      let multipliedValue = 2*elementValue;
-        multipliedValue > 9 ?
-        sumAll += (multipliedValue - 9) :
-        sumAll += multipliedValue;
-    }
-  }
-  //Takes the sumAllm of all even elements and doubled odd elements and multiplies for 9.
-  multiSum = sumAll*9;
-  const modulo = multiSum%10;
 
-  //console.log(`sumAll is ${sumAll}, multiSum is${multiSum}, modulo is ${modulo}`);
+  const sumAll = numArray.reduceRight(somaTudo);
+
+  sumTimesNine = sumAll*9;
+
+  const modulo = sumTimesNine%10;
+  // console.log(`sumAll is ${sumAll}, multiSum is${sumTimesNine}, modulo is ${modulo}`);
   //Returns modulo of sum by 10. If true, card is invalid. If false, card is valid.
   return modulo;
 }
 
 
-
-
 //Analyses an array of arrays of Credit Card Numbers and - if invalid - saves to invalidBatch array. Returns invalidBatch.
-const findInvalidCards = (arrayBatch) => {
-  const invalidBatch = [];
-  for (let i = 0; i< arrayBatch.length; i++) {
-    if (validateCred(arrayBatch[i])) {
-      invalidBatch.push(arrayBatch[i]);
-    }
-  }
-  //console.log('passou aqui');
-  return invalidBatch;
-}
+const findInvalidCards = arrayBatch => invalidBatch = arrayBatch.filter(validateCred);
+
+console.log(findInvalidCards(batch));
 
 
+//Takes invalid Credit Card Numbers in invalidBatch and converts into valid numbers:
 
-//Takes invalid Credit Card Numbers in invalidBatch and cnverts into valid numbers:
+const convertToValid = (invalidCreditCardsArray, validateCred) => invalidCreditCardsArray.map(creditCard => {
+    const modulo = validateCred(creditCard);
+    return creditCard.splice(creditCard.length -1, 0, modulo, 0);
+  })
+
 const convertInvalid = (arrayInvalid) => {
   const newValid = [];
   for (let i = 0; i< arrayInvalid.length; i++) {
